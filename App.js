@@ -23,13 +23,15 @@ const App: () => React$Node = () => {
   }
 
   init = () => {
+    setGuess('')
+    setFeedback('')
     setSecreteNumber(generateRandom())
+
   }
 
   useEffect(() => {
     init()
-
-  })
+  }, [])
 
   decreaseChance = () => {
 
@@ -46,6 +48,7 @@ const App: () => React$Node = () => {
       return
     }
     if (value > 1) {
+      decreaseChance()
       if (userGuess < secrete) {
         setFeedback('The number is larger than ' + userGuess + ' and you have ' + chanceLeft + " left")
 
@@ -54,11 +57,13 @@ const App: () => React$Node = () => {
         setFeedback('The number is smaller than ' + userGuess + " and you have " + chanceLeft + " left")
 
       }
-      decreaseChance()
+
       return
     }
     else {
       setFeedback('Sorry You used all your chances')
+      init()
+      setChanceLeft(5)
     }
   }
 
@@ -67,6 +72,7 @@ const App: () => React$Node = () => {
       <Text>Guess my number, now!, you have 5 chance</Text>
       <TextInput
         style={styles.input}
+        value={guess}
         keyboardType='number-pad'
         onChangeText={(guess) => setGuess(guess)}
         placeholder='Enter your guess'
